@@ -1,6 +1,5 @@
 import numpy as np
 from numpy import fft as fft
-import matplotlib.pyplot as plt
 
 def NDiffFd1(X,Y):
     Dx  = X[1]-X[0]
