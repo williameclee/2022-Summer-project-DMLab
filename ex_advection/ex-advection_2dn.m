@@ -1,8 +1,8 @@
 %% Setup default parameters
 Omg     = 0.1;
 L       = 10;
-Npts    = 2^7;
-X       = linspace(-L,L,Npts+1);
+N       = 2^7;
+X       = linspace(-L,L,N+1);
 dX      = X(2)-X(1);
 X       = X(1:end-1);
 Y       = X.';
@@ -11,17 +11,17 @@ U       = -Omg*Yg;
 V       = Omg*Xg;
 
 %% Define initial field
-dT = 50*Omg/Npts;
+dT = 50*Omg/N;
 % dT = 0.05;
 T  = 0:dT:2*(pi/Omg);
 % Q  = zeros(length(T),Npts,Npts);
-Q0 = zeros(Npts);
+Q0 = zeros(N);
 s  = 0.6;
-for i = 1:Npts
-    for j = 1:Npts
+for i = 1:N
+    for j = 1:N
         r = sqrt((X(i)-L/3)^2+(Y(j))^2);
         if r/s < pi
-            Q0(i,j) = (cos(r/s)+1);
+            Q0(j,i) = (cos(r/s)+1);
         end
     end
 end
@@ -44,10 +44,10 @@ function Qt = adv(~,Q,U,V,X,Y)
     Ny = length(Y);
     Qx = zeros(size(Q));
     Qy = zeros(size(Q));
-    for i = 1:Nx
+    for i = 1:Ny
         Qx(i,:) = NDiffFft(X,Q(i,:));
     end
-    for j = 1:Ny
+    for j = 1:Nx
         Qy(:,j) = NDiffFft(Y,Q(:,j)).'; 
     end
     Qt = -(U.*Qx+V.*Qy);
