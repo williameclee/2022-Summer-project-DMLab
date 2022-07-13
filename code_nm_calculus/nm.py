@@ -45,3 +45,11 @@ def NDiffFft(X,Y,od=1):
     YdHat = omega**od*YHat
     Yd    = np.real(fft.ifft(YdHat))
     return Yd
+
+def NIntgRk4(t,U,dT,f):
+    k1 = f(t,U)
+    k2 = f(t+dT/2,U+(1/2)*k1*dT)
+    k3 = f(t+dT/2,U+(1/2)*k2*dT)
+    k4 = f(t+dT,U+k3*dT)
+    U_next = U+(k1+2*k2+2*k4+k4)/6*dT
+    return U_next
