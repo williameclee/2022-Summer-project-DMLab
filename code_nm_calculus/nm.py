@@ -3,35 +3,22 @@ from numpy import fft as fft
 
 def NDiffFd1(X,Y):
     Dx  = X[1]-X[0]
-    Yp1 = np.append(Y[1:],Y[0])
-    Yd  = (Yp1-Y)/Dx
+    Yd  = (np.roll(Y,1)-Y)/Dx
     return Yd
 
 def NDiffFd2(X,Y):
     Dx  = X[1]-X[0]
-    Yp1 = np.append(Y[1:],Y[0])
-    Yn1 = np.append(Y[-1],Y[:-1])
-    Yd  = (Yp1-Yn1)/(2*Dx)
+    Yd  = (np.roll(Y,1)-np.roll(Y,-1))/(2*Dx)
     return Yd
 
 def NDiffFd4(X,Y):
     Dx  = X[1]-X[0]
-    Yp1 = np.append(Y[1:],Y[0])
-    Yn1 = np.append(Y[-1],Y[:-1])
-    Yp2 = np.append(Y[2:],Y[0:2])
-    Yn2 = np.append(Y[-2:],Y[:-2])
-    Yd  = (Yp1-Yn1)*(2/3/Dx)-(Yp2-Yn2)*(1/12/Dx)
+    Yd  = (np.roll(Y,1)-np.roll(Y,-1))*(2/3/Dx)-(np.roll(Y,2)-np.roll(Y,-2))*(1/12/Dx)
     return Yd
 
 def NDiffFd6(X,Y):
     Dx  = X[1]-X[0]
-    Yp1 = np.append(Y[1:],Y[0])
-    Yn1 = np.append(Y[-1],Y[:-1])
-    Yp2 = np.append(Y[2:],Y[0:2])
-    Yn2 = np.append(Y[-2:],Y[:-2])
-    Yp3 = np.append(Y[3:],Y[0:3])
-    Yn3 = np.append(Y[-3:],Y[:-3])
-    Yd  = (Yp1-Yn1)*(3/4/Dx)-(Yp2-Yn2)*(3/20/Dx)+(Yp3-Yn3)*(1/60/Dx)
+    Yd  = (np.roll(Y,1)-np.roll(Y,-1))*(3/4/Dx)-(np.roll(Y,2)-np.roll(Y,-2))*(3/20/Dx)+(np.roll(Y,3)-np.roll(Y,-3))*(1/60/Dx)
     return Yd
 
 def NDiffFft(X,Y,od=1):
