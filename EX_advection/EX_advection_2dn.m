@@ -12,31 +12,22 @@ V       = Omg*Xg;
 
 %% Define initial field
 dT = 50*Omg/N;
-% dT = 0.05;
-T  = 0:dT:2*(pi/Omg);
-% Q  = zeros(length(T),Npts,Npts);
-Q0 = zeros(N);
-s  = 0.6;
-for i = 1:N
-    for j = 1:N
-        r = sqrt((X(i)-L/3)^2+(Y(j))^2);
-        if r/s < pi
-            Q0(j,i) = (cos(r/s)+1);
-        end
-    end
-end
+T  = 0:dT:1*(2*pi/Omg);
+Q0 = CalQAna(X,Y,0);
 % Q(1,:,:) = Q0;
 Q = Q0;
 % Q(1,:,:) = exp(-5*(sqrt((mod(Xg-L/2+L,2*L)-L).^2+(mod(Yg-L/2+L,2*L)-L).^2)));
 
 %% Intergrating
+tic;
 for t = 1:length(T)-1
 %     Q(t+1,:,:) = NIntgRk4(T(t),squeeze(Q(t,:,:)),dT,@adv,U,V,X,Y);
     Q = NIntgRk4(T(t),Q,dT,@adv,U,V,X,Y);
 end
+toc;
 
 %% Plot
-circulation_plot;
+EX_advection_2dn_plot;
 
 %% Function
 function Qt = adv(~,Q,U,V,X,Y)
@@ -51,4 +42,20 @@ function Qt = adv(~,Q,U,V,X,Y)
         Qy(:,j) = NDiffFft(Y,Q(:,j)).'; 
     end
     Qt = -(U.*Qx+V.*Qy);
+end
+
+function QAna = CalQAna(X,Y,phi)
+    QAna = zeros(length(Y),length(X));
+    R    = 10/3;
+    Rx   = R*cos(phi);
+    Ry   = R*sin(phi);
+    s  = 0.6;
+    for i = 1:length(X)
+        for j = 1:length(Y)
+            r = sqrt((X(i)-Rx)^2+(Y(j)-Ry)^2);
+            if r/s < pi
+                QAna(j,i) = (cos(r/s)+1);
+            end
+        end
+    end
 end

@@ -8,5 +8,5 @@ function Yd1Fd1 = NDiffFd1(X,Y)
         Y = Y.';
     end
     dX     = X(2)-X(1);
-    Yd1Fd1 = ([Y(2:end),Y(1)] -Y(1:end))/(1*dX);
+    Yd1Fd1 = (circshift(Y,-1)-Y)/(1*dX);
 end
