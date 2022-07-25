@@ -52,3 +52,11 @@ def NIntgFd1(t,Q,Dt,f):
 def rms(A):
     RMS = np.sqrt(np.sum(A**2)/np.prod((A).shape))
     return RMS
+
+def CalErrA(F,G):
+    Err = (np.mean(F)-np.mean(G))**2+(np.std(F)-np.std(G))**2;
+    return Err
+
+def CalErrF(F,G):
+    Err = 2*(1-np.corrcoef(F,G)[1])*np.std(F)*np.std(G);
+    return Err

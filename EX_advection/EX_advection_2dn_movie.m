@@ -43,12 +43,8 @@ for t = 2:length(T)
     QAna = CalQAna(X,Y,Omg*T(t));
     QNum = NIntgFd1(T(t-1),QNum,dT,@Adv,U,V,X,Y);
     E(t) = rms(QNum-QAna,"all")^2;
-    sn  = std(QNum,[],"all");
-    sa  = std(QAna,[],"all");
-    rho = corrcoef(QNum,QAna);
-    rho = rho(2);
-    Ea(t) = (mean(QNum,"all")-mean(QAna,"all"))^2+(sn-sa)^2;
-    Ef(t) = 2*(1-rho)*sn*sa;
+    Ea(t) = CalErrA(QNum,QAna);
+    Ef(t) = CalErrF(QNum,QAna);
     if mod(t,20) == 1
         EX_advection_2dn_plot;
         writeVideo(M,getframe(gcf));
